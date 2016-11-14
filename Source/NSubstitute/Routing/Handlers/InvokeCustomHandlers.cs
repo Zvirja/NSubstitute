@@ -2,11 +2,11 @@
 
 namespace NSubstitute.Routing.Handlers
 {
-    public class InvokeCustomHandlers : ICallHandler
+    public class ReturnFromCustomHandlers : ICallHandler
     {
         private readonly ICustomHandlers _customHandlers;
 
-        public InvokeCustomHandlers(ICustomHandlers customHandlers)
+        public ReturnFromCustomHandlers(ICustomHandlers customHandlers)
         {
             _customHandlers = customHandlers;
         }
