@@ -21,7 +21,7 @@ namespace NSubstitute.Core
 
         public bool HasResultFor(ICall call)
         {
-            if (SkipVoidCall(call)) return false;
+            if (ReturnsVoidFrom(call)) return false;
             return _results.Any(x => x.IsResultFor(call));
         }
 
@@ -38,10 +38,7 @@ namespace NSubstitute.Core
             _results = new ConcurrentQueue<ResultForCallSpec>();
         }
 
-        /// <summary>
-        /// API to allow creation of custom <see cref="CallResults"/> which do not skip void methods.
-        /// </summary>
-        protected virtual bool SkipVoidCall(ICall call)
+        bool ReturnsVoidFrom(ICall call)
         {
             return call.GetReturnType() == typeof(void);
         }
