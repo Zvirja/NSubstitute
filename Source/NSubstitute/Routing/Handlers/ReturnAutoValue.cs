@@ -14,21 +14,23 @@ namespace NSubstitute.Routing.Handlers
     public class ReturnAutoValue : ICallHandler
     {
         private readonly IEnumerable<IAutoValueProvider> _autoValueProviders;
-        private readonly ICallResultsCache _resultsCache;
+        private readonly ICallResults _callResults;
+        private readonly ICallSpecificationFactory _callSpecificationFactory;
         private readonly AutoValueBehaviour _autoValueBehaviour;
 
-        public ReturnAutoValue(AutoValueBehaviour autoValueBehaviour, IEnumerable<IAutoValueProvider> autoValueProviders, ICallResultsCache resultsCache)
+        public ReturnAutoValue(AutoValueBehaviour autoValueBehaviour, IEnumerable<IAutoValueProvider> autoValueProviders, ICallResults callResults, ICallSpecificationFactory callSpecificationFactory)
         {
             _autoValueProviders = autoValueProviders;
-            _resultsCache = resultsCache;
+            _callResults = callResults;
+            _callSpecificationFactory = callSpecificationFactory;
             _autoValueBehaviour = autoValueBehaviour;
         }
 
         public RouteAction Handle(ICall call)
         {
-            if (_resultsCache.HasResultFor(call))
+            if (_callResults.HasResultFor(call))
             {
-                return RouteAction.Return(_resultsCache.GetResult(call));
+                return RouteAction.Return(_callResults.GetResult(call));
             }
 
             var type = call.GetReturnType();
@@ -45,7 +47,8 @@ namespace NSubstitute.Routing.Handlers
                 var valueToReturn = provider.GetValue(type);
                 if (_autoValueBehaviour == AutoValueBehaviour.UseValueForSubsequentCalls)
                 {
-                    _resultsCache.SetResultForCall(call, new ReturnValue(valueToReturn), MatchArgs.AsSpecifiedInCall);
+                    var spec = _callSpecificationFactory.CreateFrom(call, MatchArgs.AsSpecifiedInCall);
+                    _callResults.SetResult(spec, new ReturnValue(valueToReturn));
                 }
                 return RouteAction.Return(valueToReturn);
             };

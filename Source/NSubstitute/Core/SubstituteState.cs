@@ -17,7 +17,7 @@ namespace NSubstitute.Core
         public IConfigureCall ConfigureCall { get; private set; }
         public IEventHandlerRegistry EventHandlerRegistry { get; private set; }
         public IAutoValueProvider[] AutoValueProviders { get; private set; }
-        public ICallResultsCache AutoValuesCache { get; }
+        public ICallResults AutoValuesCallResults { get; }
         public IResultsForType ResultsForType { get; private set; }
         public ICustomHandlers CustomHandlers { get; }
 
@@ -33,15 +33,13 @@ namespace NSubstitute.Core
             ReceivedCalls = callStack;
             PendingSpecification = new PendingSpecification();
             CallResults = new CallResults(callInfoFactory);
+            AutoValuesCallResults = new CallResults(callInfoFactory);
             CallSpecificationFactory = CallSpecificationFactoryFactoryYesThatsRight.CreateCallSpecFactory();
             CallActions = new CallActions(callInfoFactory);
             CallBaseExclusions = new CallBaseExclusions();
             ResultsForType = new ResultsForType(callInfoFactory);
             CustomHandlers = new CustomHandlers(this);
-            AutoValuesCache = new CallResultsCache(new CallResults(callInfoFactory), CallSpecificationFactory);
-
             var getCallSpec = new GetCallSpec(callStack, PendingSpecification, CallSpecificationFactory, CallActions);
-
             ConfigureCall = new ConfigureCall(CallResults, CallActions, getCallSpec);
             EventHandlerRegistry = new EventHandlerRegistry();
             AutoValueProviders = new IAutoValueProvider[] { 

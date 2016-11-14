@@ -264,9 +264,6 @@
     <Compile Include="..\NSubstitute\Core\CallResults.cs">
       <Link>Core\CallResults.cs</Link>
     </Compile>
-    <Compile Include="..\NSubstitute\Core\CallResultsCache.cs">
-      <Link>Core\CallResultsCache.cs</Link>
-    </Compile>
     <Compile Include="..\NSubstitute\Core\CallRouter.cs">
       <Link>Core\CallRouter.cs</Link>
     </Compile>
@@ -341,9 +338,6 @@
     </Compile>
     <Compile Include="..\NSubstitute\Core\ICallResults.cs">
       <Link>Core\ICallResults.cs</Link>
-    </Compile>
-    <Compile Include="..\NSubstitute\Core\ICallResultsCache.cs">
-      <Link>Core\ICallResultsCache.cs</Link>
     </Compile>
     <Compile Include="..\NSubstitute\Core\ICallRouter.cs">
       <Link>Core\ICallRouter.cs</Link>
