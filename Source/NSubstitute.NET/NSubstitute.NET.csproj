@@ -630,9 +630,6 @@
     <Compile Include="..\NSubstitute\Routing\Handlers\EventSubscriptionHandler.cs">
       <Link>Routing\Handlers\EventSubscriptionHandler.cs</Link>
     </Compile>
-    <Compile Include="..\NSubstitute\Routing\Handlers\InvokeCustomHandlers.cs">
-      <Link>Routing\Handlers\InvokeCustomHandlers.cs</Link>
-    </Compile>
     <Compile Include="..\NSubstitute\Routing\Handlers\PropertySetterHandler.cs">
       <Link>Routing\Handlers\PropertySetterHandler.cs</Link>
     </Compile>
@@ -659,6 +656,9 @@
     </Compile>
     <Compile Include="..\NSubstitute\Routing\Handlers\ReturnFromBaseIfRequired.cs">
       <Link>Routing\Handlers\ReturnFromBaseIfRequired.cs</Link>
+    </Compile>
+    <Compile Include="..\NSubstitute\Routing\Handlers\ReturnFromCustomHandlers.cs">
+      <Link>Routing\Handlers\ReturnFromCustomHandlers.cs</Link>
     </Compile>
     <Compile Include="..\NSubstitute\Routing\Handlers\ReturnResultForTypeHandler.cs">
       <Link>Routing\Handlers\ReturnResultForTypeHandler.cs</Link>
