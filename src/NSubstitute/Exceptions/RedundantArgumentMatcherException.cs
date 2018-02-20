@@ -21,9 +21,11 @@ namespace NSubstitute.Exceptions
         {
             return
                 $"Not all the argument specifications (e.g. Arg.Is, Arg.Any) were bound during the last call.{Environment.NewLine}" +
-                $"Usually, it means that previously you passed specifications to methods, which are not handled" +
-                $" by the NSubstitute (e.g. methods are not virtual, or don't belong to a substitute)." +
-                $" That is an indication of the invalid NSubstitute usage and most likely your test code behaves not as you expect.{Environment.NewLine}" +
+                $"It could mean that previously you passed specification to a method, which is not handled" +
+                $" by the NSubstitute (e.g. method is not virtual, or doesn't belong to a substitute). Another reason" +
+                $" might be that argument specification type doesn't match the actual argument type, but code compiles due" +
+                $" to an implicit cast (e.g. between 'int' and 'double'). In any case this exception is an indication" +
+                $" of the unexpected NSubstitute usage and most likely your test code behaves not as intended.{Environment.NewLine}" +
                 $"Please use the diagnostics information below to detect and fix the defective places.{Environment.NewLine}" +
                 $"{Environment.NewLine}" +
                 $"Remaining (non-bound) argument specifications:{Environment.NewLine}" +
