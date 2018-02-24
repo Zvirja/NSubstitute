@@ -147,9 +147,8 @@ namespace NSubstitute.Acceptance.Specs
             Assert.Throws<AmbiguousArgumentsException>(() =>
                {
                    _something.Add(0, Arg.Any<int>()).Returns(1);
-                   //Should not make it here, as it can't work out which arg the matcher refers to.
-                   //If it does this will throw an AssertionException rather than AmbiguousArgumentsException.
-                   Assert.That(_something.Add(0, 5), Is.EqualTo(1));
+                   Assert.Fail("Should not make it here, as it can't work out which arg the matcher refers to." +
+                               "If it does this will throw an AssertionException rather than AmbiguousArgumentsException.");
                }
                 );
         }
