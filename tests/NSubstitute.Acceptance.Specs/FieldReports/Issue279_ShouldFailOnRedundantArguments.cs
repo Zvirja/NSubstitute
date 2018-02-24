@@ -33,5 +33,15 @@ namespace NSubstitute.Acceptance.Specs.FieldReports
             });
         }
 
+        [Test]
+        public void Should_fail_with_redundant_exceptions_if_arg_matchers_misused()
+        {
+            var foo = Substitute.For<IFoo>();
+            var misued = Arg.Is("test");
+            Assert.Throws<RedundantArgumentMatcherException>(() =>
+            {
+                foo.Blah(2.0).Returns(42);
+            });
+        }
     }
 }

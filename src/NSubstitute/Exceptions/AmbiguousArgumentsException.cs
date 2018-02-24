@@ -6,6 +6,12 @@ namespace NSubstitute.Exceptions
 {
     public class AmbiguousArgumentsException : SubstituteException
     {
+        private static readonly string BaseMessage =
+            "Cannot determine argument specifications to use. Please use specifications for all arguments of the same type." +
+            Environment.NewLine +
+            "All queued specifications:" +
+            Environment.NewLine;
+
         public AmbiguousArgumentsException(IEnumerable<IArgumentSpecification> queuedSpecifications)
             : this(BuildExceptionMessage(queuedSpecifications))
         {
@@ -17,9 +23,7 @@ namespace NSubstitute.Exceptions
 
         private static string BuildExceptionMessage(IEnumerable<IArgumentSpecification> queuedSpecifications)
         {
-            return $"Cannot determine argument specifications to use. Please use specifications for all arguments of the same type.{Environment.NewLine}" +
-                   $"All queued specifications:{Environment.NewLine}" +
-                   $"{string.Join(Environment.NewLine, queuedSpecifications)}";
+            return BaseMessage + "    " + string.Join(Environment.NewLine + "    ", queuedSpecifications);
         }
     }
 }
