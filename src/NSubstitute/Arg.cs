@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using NSubstitute.Core.Arguments;
 
 // Disable nullability for client API, so it does not affect clients.
@@ -29,7 +30,7 @@ namespace NSubstitute
         }
 
         /// <summary>
-        /// Match argument that satisfies <paramref name="predicate"/>. 
+        /// Match argument that satisfies <paramref name="predicate"/>.
         /// If the <paramref name="predicate"/> throws an exception for an argument it will be treated as non-matching.
         /// </summary>
         public static ref T Is<T>(Expression<Predicate<T>> predicate)
@@ -87,12 +88,31 @@ namespace NSubstitute
         }
 
         /// <summary>
-        /// Capture any argument compatible with type <typeparamref name="T"/> and use it to call the <paramref name="useArgument"/> function 
+        /// Capture any argument compatible with type <typeparamref name="T"/> and use it to call the <paramref name="useArgument"/> function
         /// whenever a matching call is made to the substitute.
         /// </summary>
         public static ref T Do<T>(Action<T> useArgument)
         {
             return ref ArgumentMatcher.Enqueue<T>(new AnyArgumentMatcher(typeof(T)), x => useArgument((T) x!));
+        }
+
+        public delegate void RefAction<T>(ref T value);
+
+        /// <summary>
+        /// Capture any argument compatible with type <typeparamref name="T"/> and use it to call the <paramref name="useArgument"/> function
+        /// whenever a matching call is made to the substitute.
+        /// The value is provided by-ref, so could be mutated by the callback.
+        /// </summary>
+        /// <example>
+        /// substitute.Run(Arg.Do((ref Box x) => x.Value = 42));
+        /// </example>
+        public static ref T Do<T>(RefAction<T> useArgument) where T: struct
+        {
+            return ref ArgumentMatcher.Enqueue<T>(new AnyArgumentMatcher(typeof(object)), x =>
+            {
+                ref T value = ref Unsafe.Unbox<T>(x!);
+                useArgument(ref value);
+            });
         }
 
         /// <summary>
@@ -119,7 +139,7 @@ namespace NSubstitute
             public static T Is<T>(T value) => Arg.Is(value);
 
             /// <summary>
-            /// Match argument that satisfies <paramref name="predicate"/>. 
+            /// Match argument that satisfies <paramref name="predicate"/>.
             /// If the <paramref name="predicate"/> throws an exception for an argument it will be treated as non-matching.
             /// This is provided for compatibility with older compilers --
             /// if possible use <see cref="Arg.Is{T}(Expression{Predicate{T}})" /> instead.
@@ -170,10 +190,10 @@ namespace NSubstitute
             public static TDelegate InvokeDelegate<TDelegate>(params object[] arguments) => Arg.InvokeDelegate<TDelegate>(arguments);
 
             /// <summary>
-            /// Capture any argument compatible with type <typeparamref name="T"/> and use it to call the <paramref name="useArgument"/> function 
+            /// Capture any argument compatible with type <typeparamref name="T"/> and use it to call the <paramref name="useArgument"/> function
             /// whenever a matching call is made to the substitute.
             /// This is provided for compatibility with older compilers --
-            /// if possible use <see cref="Arg.Do{T}" /> instead.
+            /// if possible use <see cref="Arg.Do{T}(System.Action{T})" /> instead.
             /// </summary>
             public static T Do<T>(Action<T> useArgument) => Arg.Do(useArgument);
         }

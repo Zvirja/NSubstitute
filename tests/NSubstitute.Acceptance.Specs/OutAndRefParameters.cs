@@ -249,6 +249,25 @@ namespace NSubstitute.Acceptance.Specs
             StringAssert.Contains("12345", exception.Message);
         }
 
+        [Test]
+        public void Mutate_by_ref_arg_in_place_via_Arg_do()
+        {
+            // arrange
+            var sub = Substitute.For<IMemberWithRefStruct>();
+
+            sub.Run(ref Arg.Do((ref Data x) => x.SetValue(42)));
+
+            // act
+            Data value = new Data
+            {
+                Value = 24
+            };
+            sub.Run(ref value);
+
+            // assert
+            Assert.That(value.Value, Is.EqualTo(42));
+        }
+
         private class Something
         {
             private readonly ILookupStrings _lookup;
@@ -258,6 +277,21 @@ namespace NSubstitute.Acceptance.Specs
                 string value;
                 return _lookup.TryGet(key, out value) ? value : "none";
             }
+        }
+
+        public struct Data
+        {
+            public int Value { get; set; }
+
+            public void SetValue(int value)
+            {
+                Value = value;
+            }
+        }
+
+        public interface IMemberWithRefStruct
+        {
+            void Run(ref Data value);
         }
     }
 }
